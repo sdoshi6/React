@@ -1,17 +1,14 @@
-.imagegrid-image
-{
-    display: inline-block;
-    padding: 10px; 
-
+.imagegrid-image img {
+    width: 150px;
+    height: 150px;
+    margin: 5px;
+    cursor: pointer;
 }
 
-.imagegrid-image img {
+.featured-image {
     width: 250px;
     height: 250px;
 }
 
-.featured-image {
-    width: 650px;
-    height: 650px;
-}
+
 

@@ -1,19 +1,17 @@
 import React from 'react';
-import Select from 'react-select';
 
-function BreedSelect(props){
- 
+function BreedSelect (props){
+
     return (
-        <div className="jumbotron">
-          <h1 className="display-4"> Dog Gallery</h1>
-          <p className="lead">ITMD 565 - sodhis6@hawk.iit.edu</p>
-          <select onChange={(e)=> props.changefunction(e.target.value) }> 
-                <option  value="frise">frise</option>
-                <option  value="pug">pug</option>
-                <option  value="akita">akita</option>
+        <React.Fragment>
+         Select Breed:  <select onChange={(e)=> props.changefunction(e.target.value) } defaultValue={props.selectedBreedName} > 
+                <option  value="frise">Frise</option>
+                <option  value="pug">Pug</option>
+                <option  value="akita">Akita</option>
           </select>         
-        </div>
-    );    
+          </React.Fragment>
+    );
+     
+    
 }
-
 export default BreedSelect;

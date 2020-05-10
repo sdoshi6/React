@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import './components/dog-gallery.css';
-import BreedSelect from './components/BreedSelect';
+import AppHeader from './components/AppHeader';
 import FeaturedImage from './components/FeaturedImage';
 import ImageGrid from './components/ImageGrid';
 
@@ -11,8 +11,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       imageUrls: [],
-      featuredImage: 'https://images.dog.ceo/breeds/hound-afghan/n02088094_1003.jpg', 
-      selectedBreed:''
+      featuredImage: '', 
+      selectedBreed:'akita'
     };
     
     this.handleSelectedBreed = this.handleSelectedBreed.bind(this);
@@ -24,8 +24,7 @@ class App extends React.Component {
        return (
           <div className="App">
             <div className="container">
-            
-              <BreedSelect  changefunction = {this.handleSelectedBreed} />
+              <AppHeader selectedBreedName={this.state.selectedBreed} changefunction = {this.handleSelectedBreed} />
               <FeaturedImage imgsrc={this.state.featuredImage}/>
               <ImageGrid clickfunction={this.handleImageClick}  imageUrls={this.state.imageUrls}/> 
             </div>
@@ -42,36 +41,69 @@ class App extends React.Component {
   }
 
   handleSelectedBreed(breedname){
+
     this.setState(currentState => {
       return {
-       selectedBreed: breedname
+       selectedBreed: breedname,
       };
     });
 
   }
 
   componentDidMount(){
-    fetch('https://dog.ceo/api/breed/hound/images').then(res => {
+    const currentBreedName= this.state.selectedBreed; 
+    const featureImageFetchUrl = 'https://dog.ceo/api/breed/' + currentBreedName +  '/images/random'
+    const galleryImageFetchUrl = 'https://dog.ceo/api/breed/' + currentBreedName +  '/images'
+    fetch(featureImageFetchUrl).then(res => {
+      return res.json();
+      }).then(json => {
+      this.setState({
+        featuredImage: json.message
+      });
+      });
+  
+  fetch(galleryImageFetchUrl).then(res => {
+    return res.json();
+    }).then(json => {
+    this.setState({
+      imageUrls: json.message
+  });
+  });
+
+
+
+  }
+
+
+
+  componentDidUpdate(prevProps, prevState){
+       
+    if (this.state.selectedBreed !== prevState.selectedBreed){
+     
+      const currentBreedName= this.state.selectedBreed; 
+      const featureImageFetchUrl = 'https://dog.ceo/api/breed/' + currentBreedName +  '/images/random'     
+      const galleryImageFetchUrl = 'https://dog.ceo/api/breed/' + currentBreedName +  '/images'
+      
+      fetch(featureImageFetchUrl).then(res => {
         return res.json();
         }).then(json => {
         this.setState({
-          imageUrls: json.message
+          featuredImage: json.message
       });
     });
-    // fetch('https://dog.ceo/api/breeds/list/all').then(res => {
-    //   return res.json();
-    //   }).then(json => {
-    //   this.setState({
-    //     BreedOptions: json.message
-    // });
-  // });
-  }
-
-  componentDidUpdate(){
     
+    fetch(galleryImageFetchUrl).then(res => {
+      return res.json();
+      }).then(json => {
+      this.setState({
+        imageUrls: json.message
+    });
+    });
+  
+
+    }
   }
 
 }
-
 
 export default App;
